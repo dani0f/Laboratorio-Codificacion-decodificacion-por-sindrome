@@ -1,47 +1,59 @@
 1) generar codigo de 7 bits totales
 con 4 de info y 3 de paridad
 
-P1= i1 xor i2 xor i4
-p2= i1 xor i3
-p3= i2 xor i3 xor I4
+P1= i1 xor i2 xor i4 xor i9
+p2= i1 xor i3 xor i5 xor i7
+p3= i2 xor i3 xor I4 xor i6 xor i8
+
 
 2) se definen las ecuaciones como una matriz en donde cada bit es una fila de la matriz.
 las columnas son los datos.
 
-P=[1 1 0 1]
-  [1 0 1 0]  //Matriz de paridad
-  [0 1 1 1]
+P=[1 1 0 1 0 0 0 0 1]
+  [1 0 1 0 1 0 1 0 0]  //Matriz de paridad
+  [0 1 1 1 0 1 0 1 0]
 
   para verificar si es código es valido se utiliza:
     H=P|I
-    H=[1 1 0 1|1 0 0]
-      [1 0 1 0|0 1 0]
-      [0 1 1 1|0 0 1]
+    H=[1 1 0 1 0 0 0 0 1|1 0 0]
+      [1 0 1 0 1 0 1 0 0|0 1 0]
+      [0 1 1 1 0 1 0 1 0|0 0 1]
 2) Matriz generadora
     G=I|P^t
-    G=[1 0 0 0|1 1 0]
-      [0 1 0 0|1 0 1]
-      [0 0 1 0|0 1 1]
-      [0 0 0 1|1 0 1]
+    G=[1 0 0 0 0 0 0 0 0|1 1 0]
+      [0 1 0 0 0 0 0 0 0|1 0 1]
+      [0 0 1 0 0 0 0 0 0|0 1 1]
+      [0 0 0 1 0 0 0 0 0|1 0 1]
+      [0 0 0 0 1 0 0 0 0|0 1 0]
+      [0 0 0 0 0 1 0 0 0|0 0 1]
+      [0 0 0 0 0 0 1 0 0|0 1 0]
+      [0 0 0 0 0 0 0 1 0|0 0 1]
+      [0 0 0 0 0 0 0 0 1|1 0 0]
+  
+
     Luego a un vector de datos X(entrada), se le asigna código C:
     XxorG=C
 
-se tiene vector de entrada X=1001
+se tiene vector de entrada X=1001100001
 se genera el codigo con XxorG=C
 
-[1 0 0 1] xor [1 0 0 0|1 1 0]
-              [0 1 0 0|1 0 1]
-              [0 0 1 0|0 1 1]
-              [0 0 0 1|1 0 1]
+[100110001] xor  [1 0 0 0 0 0 0 0 0|1 1 0]
+                  [0 1 0 0 0 0 0 0 0|1 0 1]
+                  [0 0 1 0 0 0 0 0 0|0 1 1]
+                  [0 0 0 1 0 0 0 0 0|1 0 1]
+                  [0 0 0 0 1 0 0 0 0|0 1 0]
+                  [0 0 0 0 0 1 0 0 0|0 0 1]
+                  [0 0 0 0 0 0 1 0 0|0 1 0]
+                  [0 0 0 0 0 0 0 1 0|0 0 1]
+                  [0 0 0 0 0 0 0 0 1|1 0 0]
 
 (¿como hacer xor de vectores?)
 xor depende de la paridad si es par es 0, si es impar es 1
 
-    xor de 1 0 0 0 = 1
-    xor de 0 0 0 0 = 0
-    xor de 0 0 0 0 = 0
-    xor de 0 0 0 1 = 1
-    xor de 1 0 0 1 = 0
-    xor de 1 0 0 0 = 1
-    xor de 0 0 0 1 = 1     = [1 0 0 1 0 1 1] = C (codigo generado de 7bits, 4info, 3paridad)
+    xor de 100000000 = 1
+    xor de 000000000 = 0
+    xor de 000000000 = 0
+    xor de 000100000 = 1
+    xor de 000010000=  1
+    ...    = [1 0 0 1 1 0 0 0 1 1 0 1] = C (codigo generado de 12bits, 9info, 3paridad)
 
