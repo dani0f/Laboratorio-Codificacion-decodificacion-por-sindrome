@@ -30,9 +30,8 @@ def Tabla_sindrome(Ht):
                 s=s+"1"
             else:
                 s=s+"0"
-        Tabla_sindrome.append([ s ,i])
+        Tabla_sindrome.append([ s ,vector_nulo])
     return(Tabla_sindrome)
-
 
 
 def Codificacion(G,archivo_texto):
@@ -53,10 +52,12 @@ def Codificacion(G,archivo_texto):
     return(strC)
 
 
-def Decodificacion_sindrome(Ht,Tabla_sindrome,codigo):
+def Decodificacion_sindrome(Ht,Tabla_sindrome,archivo_texto,numero_archivo,archivo_resultados,bool_correcion):
+    file = open(archivo_texto)                 
+    data = file.read() 
     x=[]  
-    for i in range(len(codigo)):
-        x.append(int(codigo[i]))
+    for i in range(len(data)):
+        x.append(int(data[i]))
     X=np.array(x)
     sindrome=np.dot(X,Ht)
     strS=""
@@ -65,21 +66,33 @@ def Decodificacion_sindrome(Ht,Tabla_sindrome,codigo):
             strS=strS+"0"
         else:
             strS=strS+"1"
-    if(strS=="0000"):
-        print("no hay error")
-    else:
+    contador_errores_detectados=0
+    contador_errores_corregidos=0
+    if(strS!="0000"):
+        #print("archivo:",numero_archivo,"error para corregir en bit ",Tabla_sindrome[i][1])
         for i in range(len(Tabla_sindrome)):
-            if(Tabla_sindrome[i][0] == strS):
-                print("error detectado en bit ",Tabla_sindrome[i][1])
-"""    
-P=Matriz_paridad()
-Ht=H_transpuesta(P)
-tabla_sindrome=Tabla_sindrome(Ht)
-print("Generadora",Matriz_generadora(P))
-G=Matriz_generadora(P)
-codigo=Codificacion(Matriz_generadora(P),"datos_generados_2.txt")
-print("codigo",codigo)
-print(tabla_sindrome)
-print(P)
-print(Matriz_generadora(P)) 
-Decodificacion_sindrome(Ht,tabla_sindrome,codigo)"""
+            if((Tabla_sindrome[i][0] == strS) and bool_correcion==1): 
+                Str_cod_transmitido=""
+                e=Tabla_sindrome[i][1]
+                for z in range(len(e)):
+                    if (e[z] + X[z]) %2 ==float(0):
+                        Str_cod_transmitido=Str_cod_transmitido+"0"
+                    else:
+                        Str_cod_transmitido=Str_cod_transmitido+"1"
+                #print("Codigo original",Str_cod_transmitido)
+                #print("eerror")
+                output_file = open("datos_generados_"+str(numero_archivo)+".txt", "w")
+                output_file.write(Str_cod_transmitido)
+                output_file.close()
+                contador_errores_corregidos=contador_errores_corregidos+1
+                bool_correcion=0 #solo se tiene 1 intento de correción
+
+    #if(numero_archivo==0):
+    #    f = open(archivo_resultados,'w')
+    #else:
+    #    f = open(archivo_resultados,'a')
+    #f.write(str(numero_archivo)+","+str(contador_errores_detectados)+","+str(contador_errores_corregidos)+"\n")
+    #f.close()            
+                
+                
+
