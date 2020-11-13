@@ -1,4 +1,9 @@
 from random import choice,randrange
+import codificador_decodificador as cod
+import numpy as np
+
+P=cod.Matriz_paridad()
+G=cod.Matriz_generadora(P)
 
 def generar_30_archivos():
     for j in range(30):
@@ -7,6 +12,14 @@ def generar_30_archivos():
             cadena=cadena+choice(["0","1"])
         output_file = open("datos_generados_"+str(j)+".txt", "w")
         output_file.write(cadena)
+        output_file.close()
+
+#se codifican los 30 archivos creados por generar_30, la matriz de paridad esta definida en archivo codificador_decodificador
+def codificar_30_archivos():
+    for i in range(30):
+        C=cod.Codificacion(G,"datos_generados_"+str(i)+".txt")
+        output_file = open("datos_generados_"+str(i)+".txt", "w")
+        output_file.write(C)
         output_file.close()
 
 def generador_errores(prob):
@@ -38,5 +51,8 @@ def generador_errores(prob):
         file.write(posicion_errores)
         file.close()
 
-generar_30_archivos()           
+#generar_30_archivos()  
+#codificar_30_archivos()         
 #generador_errores(0.1)
+#decodificador_sindrome()
+#graficos de varianza/media

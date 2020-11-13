@@ -71,15 +71,15 @@ def Decodificacion_sindrome(Ht,Tabla_sindrome,codigo):
         for i in range(len(Tabla_sindrome)):
             if(Tabla_sindrome[i][0] == strS):
                 print("error detectado en bit ",Tabla_sindrome[i][1])
-    
+"""    
 P=Matriz_paridad()
 Ht=H_transpuesta(P)
 tabla_sindrome=Tabla_sindrome(Ht)
 print("Generadora",Matriz_generadora(P))
 G=Matriz_generadora(P)
 codigo=Codificacion(Matriz_generadora(P),"datos_generados_2.txt")
-print("codigooooooooooooooo",codigo)
-#print(tabla_sindrome)
+print("codigo",codigo)
+print(tabla_sindrome)
 print(P)
-#print(Matriz_generadora(P))
-Decodificacion_sindrome(Ht,tabla_sindrome,"1001100011010")
+print(Matriz_generadora(P)) 
+Decodificacion_sindrome(Ht,tabla_sindrome,codigo)"""

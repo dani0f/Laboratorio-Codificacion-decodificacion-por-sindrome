@@ -1,10 +1,5 @@
-1) generar codigo de 7 bits totales
-con 4 de info y 3 de paridad
-
-P1= i1 xor i2 xor i4 xor i9
-p2= i1 xor i3 xor i5 xor i7
-p3= i2 xor i3 xor I4 xor i6 xor i8
-
+1) generar codigo de 13 bits totales
+con 9 de info y 4 de paridad
 
 2) se definen las ecuaciones como una matriz en donde cada bit es una fila de la matriz.
 las columnas son los datos.
@@ -41,15 +36,15 @@ P=[1 1 0 1 0 0 0 1 1]
 se tiene vector de entrada X=1001100001
 se genera el codigo con XxorG=C
 
-[100110001] xor   [1 0 0 0 0 0 0 0 0|1 1 0 0]
-                  [0 1 0 0 0 0 0 0 0|1 0 1 1]
-                  [0 0 1 0 0 0 0 0 0|0 1 1 0]
-                  [0 0 0 1 0 0 0 0 0|1 0 1 0]
-                  [0 0 0 0 1 0 0 0 0|0 1 0 1]
-                  [0 0 0 0 0 1 0 0 0|0 0 1 1]
-                  [0 0 0 0 0 0 1 0 0|0 1 0 0]
-                  [0 0 0 0 0 0 0 1 0|0 0 1 1]
-                  [0 0 0 0 0 0 0 0 1|1 0 0 1]
+[100110001] xor   [1. 0. 0. 0. 0. 0. 0. 0. 0. 1. 1. 0. 0.]  =  C
+                  [0. 1. 0. 0. 0. 0. 0. 0. 0. 1. 0. 1. 1.]
+                  [0. 0. 1. 0. 0. 0. 0. 0. 0. 0. 1. 1. 0.]
+                  [0. 0. 0. 1. 0. 0. 0. 0. 0. 1. 0. 1. 0.]
+                  [0. 0. 0. 0. 1. 0. 0. 0. 0. 0. 1. 0. 1.]
+                  [0. 0. 0. 0. 0. 1. 0. 0. 0. 0. 0. 1. 1.]
+                  [0. 0. 0. 0. 0. 0. 1. 0. 0. 0. 1. 1. 1.]
+                  [0. 0. 0. 0. 0. 0. 0. 1. 0. 1. 1. 0. 1.]
+                  [0. 0. 0. 0. 0. 0. 0. 0. 1. 1. 0. 0. 1.]
 
 (¿como hacer xor de vectores?)
 xor depende de la paridad si es par es 0, si es impar es 1
@@ -60,8 +55,8 @@ xor depende de la paridad si es par es 0, si es impar es 1
     xor de 000100000 = 1
     xor de 000010000=  1
     ---
-    ...    = [1 0 0 1 0 1 1 0 1 1 0 1 1] = C (codigo generado de 12bits, 9info, 3paridad)
-     archivo 2 : 100101101100
+    ...    = [1 0 0 1 0 1 1 0 1 1 0 1 1] = C (codigo generado de 12bits, 9info, 4paridad)
+original: 100101101   Codificado:1001011011011
 Decodificación:
 
   C*H^t=(000)->valido
@@ -69,36 +64,32 @@ Decodificación:
 
 Se crea la siguiente tabla de sindrome 
 
-S1=100000000  *([1 1 0 1 0 0 0 0 1|1 0 0 0] ) traspuesta
-S2=010000000    [1 0 1 0 1 0 1 0 0|0 1 0 0]
-S3=001000000    [0 1 1 1 0 1 0 1 0|0 0 1 0]
-S4=000100000    [0 1 0 0 1 1 0 1 1|0 0 0 1]
-S5=000010000
-S6=000001000
-S7=000000100
-S8=000000010
-S9=000000001
 
-error en primer bit (100000000)
- 
+ C*[[1. 1. 0. 1. 0. 0. 0. 1. 1. 1. 0. 0. 0.] traspuesta = sindrome
+          [1. 0. 1. 0. 1. 0. 1. 1. 0. 0. 1. 0. 0.]   
+          [0. 1. 1. 1. 0. 1. 1. 0. 0. 0. 0. 1. 0.]
+          [0. 1. 0. 0. 1. 1. 1. 1. 1. 0. 0. 0. 1.]]
+
+
   (100000000)*H^t=sincrome para error en primer bit
   (010000000)*H^t=sindrome para error en segundo bit
+  ....
 
   Tabla de sindrome:
 [sindrome, Codigo pos bit de error] 
- ['1100', 0], 
- ['1011', 1]
- ['0110', 2],
- ['1010', 3],
- ['0101', 4],
- ['0011', 5],
- ['0100', 6],
- ['0011', 7],
- ['1001', 8], 
- ['1000', 9],
- ['0100', 10],
- ['0010', 11],
- ['0001', 12]
+[['1100', 0], 
+['1011', 1],
+['0110', 2], 
+['1010', 3], 
+['0101', 4], 
+['0011', 5],
+['0111', 6], 
+['1101', 7], 
+['1001', 8], 
+['1000', 9], 
+['0100', 10], 
+['0010', 11], 
+['0001', 12]]
 
 Ahora si pongo un codigo y da este sindrome se sabe que posiblemente 
 primer bit sea erroneo, este se cambia y prueba nuevamente, si ahora da (000) 
