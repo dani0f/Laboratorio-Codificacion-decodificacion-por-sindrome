@@ -1,5 +1,6 @@
 from random import choice,randrange
 import codificador_decodificador as cod
+import MediaVarianzaGrafico 
 import numpy as np
 
 P=cod.Matriz_paridad()
@@ -37,7 +38,6 @@ def generador_errores(prob,archivo_posicion_errores):
             num_elegido=randrange(prob)
             if(num_elegido==5):
                 contador_errores=contador_errores+1
-                #print("se genero un error en archivo ",i,"bit en posicion ",j)
                 file = open("datos_generados_"+str(i)+".txt")                 
                 data = list(file.read())
                 file.close()
@@ -45,12 +45,11 @@ def generador_errores(prob,archivo_posicion_errores):
                     data[j]="1"
                 else:
                     data[j]="0"
-                #print(data)
                 Strdata="".join(data)
                 file = open("datos_generados_"+str(i)+".txt", "w") 
                 file.write(Strdata)
                 file.close()
-        posicion_errores=posicion_errores+str(i)+","+str(contador_errores)+"\n"
+        posicion_errores=posicion_errores+str(contador_errores)+"-"
         file = open(archivo_posicion_errores, "w") 
         file.write(posicion_errores)
         file.close()
@@ -72,8 +71,7 @@ def comparar_archivos(archivo):
         for p in range(len(data1)):   
             if(data1[p]!=data2[p]):
                 e=e+1
-        #print(data1,"vs",data2,"errores",e)
-        posicion_errores=posicion_errores+str(i)+","+str(e)+"\n"
+        posicion_errores=posicion_errores+str(e)+"-"
     file = open(archivo, "w") 
     file.write(posicion_errores)
     file.close()
@@ -83,10 +81,10 @@ def comparar_archivos(archivo):
 
 probabilidad=[0.1,0.01,0.001]
 for i in range(len(probabilidad)):
-    print("----------------------------PROBABILIDAD DE ",probabilidad[i])
     generar_30_archivos()  
     codificar_30_archivos()         
     generador_errores(probabilidad[i],archivo_posicion_errores="errores_antes_"+str(probabilidad[i])+".txt")
     corregir_errores_30("resultados_1_prob_"+ str(probabilidad[i]) +".txt",bool_correcion = 1)
     comparar_archivos("errores_despues_"+str(probabilidad[i])+".txt")
+MediaVarianzaGrafico.graficar("errores_antes_0.1.txt","errores_antes_0.01.txt","errores_antes_0.001.txt","errores_despues_0.1.txt","errores_despues_0.01.txt","errores_despues_0.001.txt")
 #graficos de varianza/media
